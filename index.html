@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mahima & Ameya — Forever Begins Here</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --ivory:    #fdf8f2;
+      --blush:    #f2a7bb;
+      --gold:     #c9a84c;
+      --gold-lt:  #e8d08a;
+      --gold-glow:#d4b55a;
+      --mauve:    #7b4f5e;
+      --mauve-dk: #4a2b38;
+      --haldi:    #e8a020;
+      --haldi-lt: #fef3d8;
+      --text:     #3a2a2e;
+      --text-lt:  #7a6068;
+      --white:    #ffffff;
+      --sangeet-bg: #fdf8f2;
+      --varmala-bg: #faf0f4;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--ivory);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    img { display: block; width: 100%; object-fit: cover; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(253, 248, 242, 0.72);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.18);
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(253, 248, 242, 0.92);
+      box-shadow: 0 2px 40px rgba(74,43,56,0.08);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text);
+      position: relative;
+      padding-bottom: 3px;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-progress {
+      position: absolute; bottom: 0; left: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--blush), var(--gold));
+      width: 0%; transition: width 0.1s linear;
+    }
+    .nav-burger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .nav-burger span {
+      display: block; width: 24px; height: 1.5px; background: var(--text);
+      transition: all 0.3s;
+    }
+
+    /* ─── MUSIC PLAYER ──────────────────────────────────────── */
+    .music-player {
+      position: fixed; bottom: 28px; right: 28px; z-index: 800;
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(253,248,242,0.92);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 60px;
+      padding: 10px 18px 10px 14px;
+      box-shadow: 0 8px 40px rgba(74,43,56,0.12);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .music-player:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 48px rgba(74,43,56,0.18);
+    }
+    .music-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      border: none; cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+    }
+    .music-btn svg { width: 14px; height: 14px; fill: var(--white); }
+    .music-btn .pause-icon { display: none; }
+    .music-player.playing .music-btn .play-icon { display: none; }
+    .music-player.playing .music-btn .pause-icon { display: block; }
+    .music-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-lt);
+    }
+    .music-visualizer {
+      display: flex; gap: 2px; align-items: end; height: 16px;
+    }
+    .music-visualizer span {
+      width: 2.5px; background: var(--gold); border-radius: 2px;
+      transition: height 0.2s;
+    }
+    .music-player:not(.playing) .music-visualizer span { height: 3px !important; }
+
+    /* ─── HERO ───────────────────────────────────────────────── */
+    #home {
+      position: relative; height: 100vh; min-height: 600px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('photos/varmala-hero.jpg');
+      background-size: cover; background-position: center top;
+      transform: scale(1.12);
+      will-change: transform;
+      animation: heroKenBurns 25s ease-in-out infinite alternate;
+    }
+    @keyframes heroKenBurns {
+      0%   { transform: scale(1.12) translate(0, 0); }
+      100% { transform: scale(1.18) translate(-1%, 0); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(74,43,56,0.85) 0%,
+        rgba(74,43,56,0.45) 50%,
+        rgba(74,43,56,0.88) 100%
+      );
+    }
+    .hero-overlay::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, transparent 0%, rgba(74,43,56,0.3) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .hero-wreath {
+      width: 340px; max-width: 88vw;
+      margin-bottom: -24px;
+      opacity: 0;
+      animation: wreathFade 2.5s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
+    }
+    @keyframes wreathFade {
+      from { opacity: 0; transform: scale(0.88) rotate(-3deg); }
+      to   { opacity: 0.92; transform: scale(1) rotate(0deg); }
+    }
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      text-shadow: 0 4px 32px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5), 0 0 80px rgba(232,208,138,0.15);
+      opacity: 0;
+      animation: nameFade 2.2s cubic-bezier(0.22,1,0.36,1) 0.5s forwards;
+    }
+    .hero-names em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+    @keyframes nameFade {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-lt), transparent);
+      margin: 22px auto;
+      opacity: 0;
+      animation: nameFade 2s ease 0.9s forwards;
+    }
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+      font-weight: 300;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.08em;
+      opacity: 0;
+      animation: nameFade 2s ease 1.2s forwards;
+    }
+    .hero-date {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(232,208,138,0.7);
+      margin-top: 20px;
+      opacity: 0;
+      animation: nameFade 2s ease 1.5s forwards;
+    }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      z-index: 2; display: flex; flex-direction: column; align-items: center;
+      gap: 8px; opacity: 0; animation: nameFade 2s ease 2s forwards;
+    }
+    .hero-scroll span {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(232,208,138,0.7), transparent);
+      animation: scrollPulse 2.5s ease infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(0.7); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ─── GOLDEN PARTICLES (Canvas) ─────────────────────────── */
+    #particleCanvas {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ─── SCROLL REVEAL ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.22,1,0.36,1), transform 1s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+    .reveal-delay-4 { transition-delay: 0.6s; }
+
+    /* ─── SECTION COMMON ─────────────────────────────────────── */
+    .section-label {
+      font-size: 0.72rem; letter-spacing: 0.28em;
+      text-transform: uppercase; font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400; line-height: 1.15;
+    }
+    .section-flavour {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: var(--text-lt);
+      margin-top: 10px;
+    }
+
+    /* ─── STORY ──────────────────────────────────────────────── */
+    #story {
+      padding: 110px 24px;
+      background: var(--ivory);
+      position: relative;
+    }
+    .story-inner {
+      max-width: 760px; margin: 0 auto; text-align: center;
+    }
+    .story-card {
+      background: linear-gradient(135deg, #fefaf4 0%, #f9f0e8 100%);
+      border: 1px solid rgba(201, 168, 76, 0.22);
+      border-radius: 4px;
+      padding: 60px 56px;
+      box-shadow: 0 8px 60px rgba(74,43,56,0.07), 0 1px 3px rgba(201,168,76,0.12);
+      position: relative; overflow: hidden;
+    }
+    .story-card::before, .story-card::after {
+      content: ''; position: absolute;
+      width: 90px; height: 90px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='2' fill='%23c9a84c' opacity='0.4'/%3E%3Cellipse cx='50' cy='25' rx='4' ry='14' fill='none' stroke='%23c9a84c' stroke-width='0.8' opacity='0.35'/%3E%3Cellipse cx='75' cy='50' rx='14' ry='4' fill='none' stroke='%23c9a84c' stroke-width='0.8' opacity='0.35'/%3E%3Cellipse cx='50' cy='75' rx='4' ry='14' fill='none' stroke='%23c9a84c' stroke-width='0.8' opacity='0.35'/%3E%3Cellipse cx='25' cy='50' rx='14' ry='4' fill='none' stroke='%23c9a84c' stroke-width='0.8' opacity='0.35'/%3E%3C/svg%3E");
+      background-size: contain; background-repeat: no-repeat;
+      opacity: 0.5;
+    }
+    .story-card::before { top: 12px; left: 12px; }
+    .story-card::after  { bottom: 12px; right: 12px; transform: rotate(180deg); }
+    .story-monogram {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.2rem; font-weight: 300;
+      color: var(--gold); letter-spacing: 0.1em;
+      margin-bottom: 28px; line-height: 1;
+    }
+    .story-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2vw, 1.28rem);
+      line-height: 1.95; font-weight: 400;
+      color: var(--text);
+    }
+    .story-text p + p { margin-top: 22px; }
+    .story-rule {
+      width: 50px; height: 1px; background: var(--gold);
+      margin: 32px auto;
+    }
+
+    /* ─── GALLERY SECTIONS ───────────────────────────────────── */
+    .gallery-section {
+      padding: 0 0 80px;
+      position: relative;
+    }
+    .gallery-section.haldi-section  { background: var(--haldi-lt); }
+    .gallery-section.varmala-section { background: var(--varmala-bg); }
+    .gallery-section.sangeet-section { background: var(--sangeet-bg); }
+
+    .gallery-header {
+      text-align: center;
+      padding: 0 24px 52px;
+    }
+
+    /* ─── SECTION HERO BANNER ─────────────────────────────────── */
+    .section-hero {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      min-height: 400px;
+      max-height: 620px;
+      overflow: hidden;
+    }
+    .section-hero-img {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center top;
+      transition: transform 8s ease-out;
+    }
+    .section-hero.in-view .section-hero-img {
+      transform: scale(1.06);
+    }
+    .section-hero-overlay {
+      position: absolute; inset: 0;
+    }
+    .sangeet-section .section-hero-overlay {
+      background: linear-gradient(to bottom, rgba(253,248,242,0) 40%, rgba(253,248,242,1) 100%);
+    }
+    .haldi-section .section-hero-overlay {
+      background: linear-gradient(to bottom, rgba(254,243,216,0) 40%, rgba(254,243,216,1) 100%);
+    }
+    .varmala-section .section-hero-overlay {
+      background: linear-gradient(to bottom, rgba(250,240,244,0) 40%, rgba(250,240,244,1) 100%);
+    }
+
+    /* ─── FILMSTRIP ──────────────────────────────────────────── */
+    .filmstrip-wrap {
+      max-width: 1100px;
+      margin: 0 auto 48px;
+      padding: 0 24px;
+    }
+    .filmstrip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .filmstrip-item {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 4/3;
+    }
+    .filmstrip-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.5s;
+      filter: brightness(0.95) saturate(1.08);
+    }
+    .filmstrip-item:hover img {
+      transform: scale(1.06);
+      filter: brightness(1.05) saturate(1.15);
+    }
+    .filmstrip-item::after {
+      content: ''; position: absolute; inset: 0;
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 4px;
+      pointer-events: none;
+      transition: border-color 0.4s;
+    }
+    .filmstrip-item:hover::after {
+      border-color: rgba(201,168,76,0.5);
+    }
+
+    /* ─── MASONRY ────────────────────────────────────────────── */
+    .masonry-wrap {
+      padding: 0 16px;
+    }
+    .masonry {
+      columns: 3; column-gap: 10px;
+      max-width: 1280px; margin: 0 auto;
+    }
+    .masonry-item {
+      break-inside: avoid; margin-bottom: 10px;
+      overflow: hidden; border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px) scale(0.97);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .masonry-item.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .masonry-item img {
+      transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94),
+                  filter 0.55s ease;
+      filter: brightness(0.97) saturate(1.05);
+    }
+    .masonry-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(1.04) saturate(1.12);
+    }
+    .masonry-item::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(74,43,56,0);
+      transition: background 0.4s;
+      pointer-events: none;
+    }
+    .masonry-item:hover::after {
+      background: rgba(74,43,56,0.06);
+    }
+
+    /* ─── SVG DIVIDERS ──────────────────────────────────────── */
+    .floral-divider {
+      display: block; margin: 0 auto;
+      width: min(600px, 90vw);
+      opacity: 0.55;
+    }
+    .section-divider-wrap {
+      text-align: center;
+      padding: 40px 0;
+    }
+    .haldi-section .section-divider-wrap { background: var(--haldi-lt); }
+    .varmala-divider-wrap {
+      background: var(--varmala-bg);
+      padding: 50px 0 0;
+      text-align: center;
+    }
+
+    /* ─── LIGHTBOX ──────────────────────────────────────────── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(20, 10, 14, 0);
+      align-items: center; justify-content: center;
+      flex-direction: column;
+      transition: background 0.4s;
+    }
+    #lightbox.open {
+      display: flex;
+      background: rgba(20, 10, 14, 0.97);
+    }
+    .lb-img-wrap {
+      position: relative; max-width: 90vw; max-height: 82vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #lb-img {
+      max-width: 90vw; max-height: 82vh;
+      width: auto; height: auto;
+      border-radius: 3px;
+      box-shadow: 0 30px 100px rgba(0,0,0,0.7);
+      transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1);
+      object-fit: contain;
+      transform: scale(0.92);
+    }
+    #lb-img.loaded {
+      transform: scale(1);
+    }
+    .lb-btn {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; font-size: 1.5rem;
+      width: 50px; height: 50px;
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+      z-index: 10001;
+    }
+    .lb-btn:hover {
+      background: rgba(201,168,76,0.25);
+      border-color: rgba(201,168,76,0.4);
+      transform: translateY(-50%) scale(1.08);
+    }
+    #lb-prev { left: 20px; }
+    #lb-next { right: 20px; }
+    #lb-close {
+      position: fixed; top: 20px; right: 24px;
+      background: none; border: none;
+      color: #fff; font-size: 2rem; cursor: pointer;
+      opacity: 0.6; z-index: 10001;
+      transition: opacity 0.3s, transform 0.3s;
+      line-height: 1;
+    }
+    #lb-close:hover { opacity: 1; transform: rotate(90deg); }
+    .lb-counter {
+      margin-top: 18px;
+      font-size: 0.75rem; letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+    }
+    .lb-section-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: rgba(232,208,138,0.6);
+      margin-top: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      padding: 80px 24px 56px;
+      text-align: center;
+      background: var(--ivory);
+      border-top: 1px solid rgba(201,168,76,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    footer::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .footer-monogram {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem; font-weight: 300;
+      color: var(--gold); letter-spacing: 0.12em;
+      margin-bottom: 14px;
+    }
+    .footer-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.15rem;
+      color: var(--text-lt); margin-bottom: 22px;
+    }
+    .footer-heart {
+      display: inline-block;
+      animation: heartbeat 1.8s ease infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      20% { transform: scale(1.25); }
+      40% { transform: scale(0.95); }
+      60% { transform: scale(1.15); }
+    }
+    .footer-thanks {
+      font-size: 0.78rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--text-lt);
+      margin-top: 12px;
+    }
+    .footer-credits {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(122,96,104,0.5);
+      margin-top: 32px;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .masonry { columns: 2; }
+      .story-card { padding: 40px 28px; }
+      .filmstrip { gap: 10px; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; flex-direction: column; gap: 0; }
+      .nav-links.open {
+        display: flex; position: fixed; inset: 0; top: 64px;
+        background: rgba(253,248,242,0.97); backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        align-items: center; justify-content: center;
+        gap: 36px; z-index: 899;
+      }
+      .nav-links.open a { font-size: 1rem; }
+      .nav-burger { display: flex; }
+      .masonry { columns: 2; }
+      .filmstrip { grid-template-columns: 1fr; gap: 12px; }
+      .filmstrip-item { aspect-ratio: 16/9; }
+      .gallery-section { padding-bottom: 60px; }
+      #lb-prev { left: 8px; }
+      #lb-next { right: 8px; }
+      .section-hero { height: 40vh; min-height: 250px; }
+      .music-player { bottom: 16px; right: 16px; padding: 8px 14px 8px 10px; }
+      .music-label { display: none; }
+    }
+    @media (max-width: 380px) {
+      .masonry { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-logo">M &amp; A</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home"    onclick="closeNav()">Home</a></li>
+    <li><a href="#sangeet" onclick="closeNav()">Sangeet</a></li>
+    <li><a href="#haldi"   onclick="closeNav()">Haldi</a></li>
+    <li><a href="#varmala" onclick="closeNav()">Varmala</a></li>
+  </ul>
+  <div class="nav-progress" id="navProgress"></div>
+  <button class="nav-burger" id="burger" onclick="toggleNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section id="home">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="hero-content">
+    <!-- Wreath SVG -->
+    <svg class="hero-wreath" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#e8d08a" stroke-width="0.8" opacity="0.85">
+        <path d="M20,100 Q55,60 90,80" stroke-width="1.2"/>
+        <ellipse cx="38" cy="78" rx="10" ry="6" transform="rotate(-40 38 78)" fill="#e8d08a" opacity="0.35"/>
+        <ellipse cx="58" cy="64" rx="11" ry="6" transform="rotate(-55 58 64)" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="80" cy="72" rx="9" ry="5" transform="rotate(-30 80 72)" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="28" cy="92" rx="8" ry="5" transform="rotate(-20 28 92)" fill="#e8d08a" opacity="0.28"/>
+        <path d="M20,100 Q48,135 85,120" stroke-width="1.2"/>
+        <ellipse cx="35" cy="118" rx="10" ry="5" transform="rotate(35 35 118)" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="60" cy="130" rx="9" ry="5" transform="rotate(20 60 130)" fill="#e8d08a" opacity="0.28"/>
+        <path d="M320,100 Q285,60 250,80" stroke-width="1.2"/>
+        <ellipse cx="302" cy="78" rx="10" ry="6" transform="rotate(40 302 78)" fill="#e8d08a" opacity="0.35"/>
+        <ellipse cx="282" cy="64" rx="11" ry="6" transform="rotate(55 282 64)" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="260" cy="72" rx="9" ry="5" transform="rotate(30 260 72)" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="312" cy="92" rx="8" ry="5" transform="rotate(20 312 92)" fill="#e8d08a" opacity="0.28"/>
+        <path d="M320,100 Q292,135 255,120" stroke-width="1.2"/>
+        <ellipse cx="305" cy="118" rx="10" ry="5" transform="rotate(-35 305 118)" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="280" cy="130" rx="9" ry="5" transform="rotate(-20 280 130)" fill="#e8d08a" opacity="0.28"/>
+        <path d="M90,80 Q170,10 250,80" stroke-width="1.2"/>
+        <ellipse cx="130" cy="44" rx="10" ry="5" transform="rotate(-70 130 44)" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="170" cy="28" rx="11" ry="5" fill="#e8d08a" opacity="0.3"/>
+        <ellipse cx="210" cy="44" rx="10" ry="5" transform="rotate(70 210 44)" fill="#e8d08a" opacity="0.3"/>
+        <path d="M85,120 Q170,185 255,120" stroke-width="1.2"/>
+        <ellipse cx="130" cy="158" rx="10" ry="5" transform="rotate(70 130 158)" fill="#e8d08a" opacity="0.28"/>
+        <ellipse cx="170" cy="172" rx="11" ry="5" fill="#e8d08a" opacity="0.28"/>
+        <ellipse cx="210" cy="158" rx="10" ry="5" transform="rotate(-70 210 158)" fill="#e8d08a" opacity="0.28"/>
+        <circle cx="170" cy="14" r="3.5" fill="#f2a7bb" opacity="0.8"/>
+        <circle cx="170" cy="186" r="3.5" fill="#f2a7bb" opacity="0.7"/>
+        <circle cx="14"  cy="100" r="3" fill="#f2a7bb" opacity="0.7"/>
+        <circle cx="326" cy="100" r="3" fill="#f2a7bb" opacity="0.7"/>
+      </g>
+    </svg>
+
+    <h1 class="hero-names">
+      <em>Mahima</em><br/>&amp; <em>Ameya</em>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">It was everything.</p>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     STORY
+══════════════════════════════════════════════ -->
+<section id="story">
+  <div class="story-inner">
+    <div class="reveal">
+      <p class="section-label">Their Story</p>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="story-card">
+        <div class="story-monogram">M &amp; A</div>
+        <div class="story-text">
+          <p>It all began at Symbiosis — two strangers who became inseparable. <strong>Mahima</strong> and <strong>Ameya</strong> found each other in a crowded campus, and everything else just fell into place.</p>
+          <div class="story-rule"></div>
+          <p>From college sweethearts to forever partners — three days, three ceremonies, one timeless love story.</p>
+          <div class="story-rule"></div>
+          <p><em>"Some love stories don't need to be found. They find you."</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     GALLERY — SANGEET
+══════════════════════════════════════════════ -->
+<section id="sangeet" class="gallery-section sangeet-section">
+  <div class="section-hero" id="sangeetHero">
+    <div class="section-hero-img" style="background-image: url('photos/sangeet-hero.jpg'); background-position: center center;"></div>
+    <div class="section-hero-overlay"></div>
+  </div>
+  <div class="gallery-header" style="padding-top: 52px;">
+    <p class="section-label reveal">Sangeet</p>
+    <h2 class="section-title reveal reveal-delay-1">The Night<br/>We Danced</h2>
+    <p class="section-flavour reveal reveal-delay-2">The night the dance floor came alive.</p>
+  </div>
+  <div class="filmstrip-wrap reveal reveal-delay-3">
+    <div class="filmstrip" id="sangeetFilmstrip"></div>
+  </div>
+  <div class="masonry-wrap">
+    <div class="masonry" id="sangeetGrid"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     GALLERY — HALDI
+══════════════════════════════════════════════ -->
+<section id="haldi" class="gallery-section haldi-section">
+  <div class="section-hero" id="haldiHero">
+    <div class="section-hero-img" style="background-image: url('photos/haldi-hero.jpg');"></div>
+    <div class="section-hero-overlay"></div>
+  </div>
+  <div class="gallery-header" style="padding-top: 52px;">
+    <p class="section-label reveal" style="color: var(--haldi);">Haldi</p>
+    <h2 class="section-title reveal reveal-delay-1">Sun-Kissed<br/>&amp; Glowing</h2>
+    <p class="section-flavour reveal reveal-delay-2">Golden turmeric, golden memories.</p>
+  </div>
+  <div class="filmstrip-wrap reveal reveal-delay-3">
+    <div class="filmstrip" id="haldiPairGrid" style="grid-template-columns: repeat(2, 1fr);"></div>
+  </div>
+  <div class="masonry-wrap">
+    <div class="masonry" id="haldiGrid"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     GALLERY — VARMALA
+══════════════════════════════════════════════ -->
+<div class="varmala-divider-wrap">
+  <svg class="floral-divider reveal" viewBox="0 0 600 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="#c9a84c" stroke-width="0.9" opacity="0.7">
+      <line x1="0" y1="30" x2="220" y2="30"/>
+      <line x1="380" y1="30" x2="600" y2="30"/>
+      <circle cx="300" cy="30" r="12" fill="none" stroke="#c9a84c"/>
+      <circle cx="300" cy="30" r="5" fill="#f2a7bb" opacity="0.7"/>
+      <ellipse cx="260" cy="30" rx="8" ry="4" fill="#f2a7bb" opacity="0.3"/>
+      <ellipse cx="340" cy="30" rx="8" ry="4" fill="#f2a7bb" opacity="0.3"/>
+      <circle cx="240" cy="30" r="3" fill="none" stroke="#c9a84c"/>
+      <circle cx="360" cy="30" r="3" fill="none" stroke="#c9a84c"/>
+      <ellipse cx="210" cy="24" rx="6" ry="3" transform="rotate(-30 210 24)" fill="#e8d08a" opacity="0.35"/>
+      <ellipse cx="390" cy="24" rx="6" ry="3" transform="rotate(30 390 24)" fill="#e8d08a" opacity="0.35"/>
+      <ellipse cx="210" cy="36" rx="6" ry="3" transform="rotate(30 210 36)" fill="#e8d08a" opacity="0.3"/>
+      <ellipse cx="390" cy="36" rx="6" ry="3" transform="rotate(-30 390 36)" fill="#e8d08a" opacity="0.3"/>
+    </g>
+  </svg>
+</div>
+
+<section id="varmala" class="gallery-section varmala-section" style="padding-top: 0;">
+  <div class="section-hero" id="varmalaHero">
+    <div class="section-hero-img" style="background-image: url('photos/varmala-hero.jpg');"></div>
+    <div class="section-hero-overlay"></div>
+  </div>
+  <div class="gallery-header" style="padding-top: 52px;">
+    <p class="section-label reveal" style="color: var(--mauve);">Wedding Varmala</p>
+    <h2 class="section-title reveal reveal-delay-1" style="color: var(--mauve-dk);">The Moment<br/>They Said Forever</h2>
+    <p class="section-flavour reveal reveal-delay-2">And in that moment, the whole world held its breath.</p>
+  </div>
+  <div class="filmstrip-wrap reveal reveal-delay-3">
+    <div class="filmstrip" id="varmalaFilmstrip"></div>
+  </div>
+  <div class="masonry-wrap">
+    <div class="masonry" id="varmalaGrid"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-monogram reveal">M &amp; A</div>
+  <p class="footer-date reveal reveal-delay-1">Mahima &amp; Ameya</p>
+  <div class="footer-heart reveal reveal-delay-2">
+    <svg width="28" height="26" viewBox="0 0 28 26" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 24.5S1.5 15.5 1.5 8A6.5 6.5 0 0 1 14 4.9 6.5 6.5 0 0 1 26.5 8C26.5 15.5 14 24.5 14 24.5z"
+            fill="#f2a7bb" stroke="#c9a84c" stroke-width="0.8"/>
+    </svg>
+  </div>
+  <p class="footer-thanks reveal reveal-delay-3">Thank you for being part of our story.</p>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════
+     LIGHTBOX
+══════════════════════════════════════════════ -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button id="lb-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+  <button class="lb-btn" id="lb-prev" onclick="lbNav(-1)" aria-label="Previous">&#8592;</button>
+  <div class="lb-img-wrap">
+    <img id="lb-img" src="" alt="Wedding photo" />
+  </div>
+  <button class="lb-btn" id="lb-next" onclick="lbNav(1)" aria-label="Next">&#8594;</button>
+  <p class="lb-counter" id="lb-counter"></p>
+  <p class="lb-section-label" id="lb-section-label"></p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     MUSIC PLAYER
+══════════════════════════════════════════════ -->
+<div class="music-player" id="musicPlayer" onclick="toggleMusic()">
+  <div class="music-btn">
+    <svg class="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    <svg class="pause-icon" viewBox="0 0 24 24"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+  </div>
+  <div class="music-visualizer" id="musicViz">
+    <span style="height:3px"></span><span style="height:3px"></span>
+    <span style="height:3px"></span><span style="height:3px"></span>
+    <span style="height:3px"></span>
+  </div>
+  <span class="music-label">Play Music</span>
+</div>
+<audio id="bgMusic" loop preload="auto">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+
+<script>
+/* ═══════════════════════════════════════════════════
+   PHOTO ARRAYS — 51 real photos
+   ─────────────────────────────────────────────────
+   Naming convention:
+   photos/sangeet-hero.jpg, sangeet-feat-1..3.jpg, sangeet-1..16.jpg
+   photos/haldi-hero.jpg, haldi-1..12.jpg
+   photos/varmala-hero.jpg, varmala-feat-1..3.jpg, varmala-1..14.jpg
+═══════════════════════════════════════════════════ */
+
+const heights = [260, 320, 280, 340, 250, 300, 270, 350, 240, 290];
+const hd = i => heights[i % heights.length];
+
+// Sangeet: 3 filmstrip + 16 masonry = 19 (+ 1 hero = 20)
+const sangeetFeatured = [
+  { src: 'photos/sangeet-feat-1.jpg' },
+  { src: 'photos/sangeet-feat-2.jpg' },
+  { src: 'photos/sangeet-feat-3.jpg' },
+];
+const sangeetPhotos = Array.from({length: 16}, (_, i) => ({
+  src: `photos/sangeet-${i + 1}.jpg`,
+  h: hd(i)
+}));
+
+// Haldi: 2 pair + 10 masonry (+ 1 hero = 13)
+const haldiPair = [
+  { src: 'photos/haldi-2.jpg' },
+  { src: 'photos/haldi-1.jpg' },
+];
+const haldiPhotos = Array.from({length: 10}, (_, i) => ({
+  src: `photos/haldi-${i + 3}.jpg`,
+  h: hd(i)
+}));
+
+// Varmala: 3 filmstrip + 14 masonry = 17 (+ 1 hero = 18)
+const varmalaFeatured = [
+  { src: 'photos/varmala-feat-1.jpg' },
+  { src: 'photos/varmala-feat-2.jpg' },
+  { src: 'photos/varmala-feat-3.jpg' },
+];
+const varmalaPhotos = Array.from({length: 14}, (_, i) => ({
+  src: `photos/varmala-${i + 1}.jpg`,
+  h: hd(i)
+}));
+
+
+/* ═══════════════════════════════════════════════════
+   BUILD FILMSTRIP
+═══════════════════════════════════════════════════ */
+function buildFilmstrip(containerId, featured, allPhotos, galleryName) {
+  const strip = document.getElementById(containerId);
+  featured.forEach((p, idx) => {
+    const item = document.createElement('div');
+    item.className = 'filmstrip-item';
+    const img = document.createElement('img');
+    img.src = p.src;
+    img.alt = `${galleryName} featured photo ${idx + 1}`;
+    img.loading = 'lazy';
+    item.appendChild(img);
+    // Click opens lightbox starting from this photo in the combined array
+    const combined = [...featured, ...allPhotos];
+    item.addEventListener('click', () => openLightbox(combined, idx, galleryName));
+    strip.appendChild(item);
+  });
+}
+
+buildFilmstrip('sangeetFilmstrip', sangeetFeatured, sangeetPhotos, 'Sangeet');
+buildFilmstrip('varmalaFilmstrip', varmalaFeatured, varmalaPhotos, 'Varmala');
+
+
+/* ═══════════════════════════════════════════════════
+   BUILD MASONRY GRIDS
+═══════════════════════════════════════════════════ */
+function buildGrid(containerId, photos, galleryName, featured) {
+  const grid = document.getElementById(containerId);
+  const combined = featured ? [...featured, ...photos] : photos;
+  const startIdx = featured ? featured.length : 0;
+  photos.forEach((p, idx) => {
+    const item = document.createElement('div');
+    item.className = 'masonry-item';
+    const img = document.createElement('img');
+    img.src = p.src;
+    img.alt = `${galleryName} photo ${idx + 1}`;
+    img.style.height = p.h + 'px';
+    img.loading = 'lazy';
+    item.appendChild(img);
+    item.addEventListener('click', () => openLightbox(combined, startIdx + idx, galleryName));
+    grid.appendChild(item);
+  });
+}
+
+/* BUILD HALDI PAIR (side by side) */
+(function() {
+  const pairContainer = document.getElementById('haldiPairGrid');
+  haldiPair.forEach((p, idx) => {
+    const item = document.createElement('div');
+    item.className = 'filmstrip-item';
+    const img = document.createElement('img');
+    img.src = p.src;
+    img.alt = 'Haldi pair photo ' + (idx + 1);
+    img.loading = 'lazy';
+    item.appendChild(img);
+    const combined = [...haldiPair, ...haldiPhotos];
+    item.addEventListener('click', () => openLightbox(combined, idx, 'Haldi'));
+    pairContainer.appendChild(item);
+  });
+})();
+
+buildGrid('sangeetGrid',  sangeetPhotos,  'Sangeet',  sangeetFeatured);
+buildGrid('haldiGrid',    haldiPhotos,    'Haldi',    haldiPair);
+buildGrid('varmalaGrid',  varmalaPhotos,  'Varmala',  varmalaFeatured);
+
+
+/* ═══════════════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════════════ */
+let lbPhotos = [], lbIdx = 0, lbTouchX = null, lbSection = '';
+
+function openLightbox(photos, idx, section) {
+  lbPhotos = photos;
+  lbIdx = idx;
+  lbSection = section || '';
+  showLbPhoto();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function showLbPhoto() {
+  const img = document.getElementById('lb-img');
+  img.style.opacity = 0;
+  img.classList.remove('loaded');
+  setTimeout(() => {
+    img.src = lbPhotos[lbIdx].src;
+    img.onload = () => {
+      img.style.opacity = 1;
+      img.classList.add('loaded');
+    };
+    document.getElementById('lb-counter').textContent =
+      (lbIdx + 1) + ' / ' + lbPhotos.length;
+    document.getElementById('lb-section-label').textContent = lbSection;
+  }, 100);
+}
+function lbNav(dir) {
+  lbIdx = (lbIdx + dir + lbPhotos.length) % lbPhotos.length;
+  showLbPhoto();
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'ArrowLeft')  lbNav(-1);
+  if (e.key === 'Escape')     closeLightbox();
+});
+
+const lb = document.getElementById('lightbox');
+lb.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, {passive:true});
+lb.addEventListener('touchend', e => {
+  if (lbTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - lbTouchX;
+  if (Math.abs(dx) > 45) lbNav(dx < 0 ? 1 : -1);
+  lbTouchX = null;
+}, {passive:true});
+lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+
+/* ═══════════════════════════════════════════════════
+   SCROLL REVEAL (IntersectionObserver)
+   — Masonry items get staggered cascade delays
+═══════════════════════════════════════════════════ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add('visible');
+      revealObserver.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Masonry items: staggered cascade
+const masonryObserver = new IntersectionObserver((entries) => {
+  const visible = entries.filter(e => e.isIntersecting);
+  visible.forEach((en, i) => {
+    setTimeout(() => {
+      en.target.classList.add('visible');
+    }, i * 70);
+    masonryObserver.unobserve(en.target);
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+
+document.querySelectorAll('.masonry-item').forEach(el => masonryObserver.observe(el));
+
+// Section hero Ken Burns on scroll into view
+const heroObserver = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.classList.add('in-view');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.section-hero').forEach(el => heroObserver.observe(el));
+
+
+/* ═══════════════════════════════════════════════════
+   PARALLAX HERO
+═══════════════════════════════════════════════════ */
+const heroBg = document.getElementById('heroBg');
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      if (y < window.innerHeight * 1.5) {
+        heroBg.style.transform = `scale(1.12) translateY(${y * 0.22}px)`;
+      }
+      // Nav style
+      document.getElementById('navbar').classList.toggle('scrolled', y > 80);
+      // Progress bar
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById('navProgress').style.width = ((y / docH) * 100) + '%';
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+
+
+/* ═══════════════════════════════════════════════════
+   GOLDEN PARTICLE SYSTEM
+═══════════════════════════════════════════════════ */
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const PARTICLE_COUNT = 65;
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class GoldParticle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2.5 + 0.5;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = Math.random() * -0.4 - 0.1;
+    this.opacity = Math.random() * 0.5 + 0.15;
+    this.pulse = Math.random() * Math.PI * 2;
+    this.pulseSpeed = Math.random() * 0.02 + 0.008;
+    // Gold color variations
+    const golds = ['232,208,138','201,168,76','242,167,187','248,225,160'];
+    this.color = golds[Math.floor(Math.random() * golds.length)];
+  }
+  update() {
+    this.x += this.speedX + Math.sin(this.pulse) * 0.15;
+    this.y += this.speedY;
+    this.pulse += this.pulseSpeed;
+    if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) this.reset();
+    if (this.y < -10) { this.y = canvas.height + 10; this.x = Math.random() * canvas.width; }
+  }
+  draw() {
+    const flickerOpacity = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color}, ${flickerOpacity})`;
+    ctx.fill();
+    // Glow
+    if (this.size > 1.5) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color}, ${flickerOpacity * 0.15})`;
+      ctx.fill();
+    }
+  }
+}
+
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  particles.push(new GoldParticle());
+}
+
+let animRunning = true;
+function animateParticles() {
+  if (!animRunning) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// Pause particles when hero not visible
+const particleObserver = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    animRunning = en.isIntersecting;
+    if (animRunning) animateParticles();
+  });
+}, { threshold: 0 });
+particleObserver.observe(document.getElementById('home'));
+
+
+/* ═══════════════════════════════════════════════════
+   MUSIC PLAYER
+═══════════════════════════════════════════════════ */
+const bgMusic = document.getElementById('bgMusic');
+const musicPlayer = document.getElementById('musicPlayer');
+const vizBars = document.querySelectorAll('#musicViz span');
+let musicPlaying = false;
+let vizInterval;
+
+function toggleMusic() {
+  if (musicPlaying) {
+    bgMusic.pause();
+    musicPlayer.classList.remove('playing');
+    clearInterval(vizInterval);
+    musicPlaying = false;
+    document.querySelector('.music-label').textContent = 'Play Music';
+  } else {
+    bgMusic.play().then(() => {
+      musicPlayer.classList.add('playing');
+      musicPlaying = true;
+      document.querySelector('.music-label').textContent = 'Now Playing';
+      // Animate visualizer bars
+      vizInterval = setInterval(() => {
+        vizBars.forEach(bar => {
+          bar.style.height = (3 + Math.random() * 13) + 'px';
+        });
+      }, 180);
+    }).catch(() => {
+      // Autoplay blocked — user needs to interact
+      document.querySelector('.music-label').textContent = 'Tap to Play';
+    });
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════
+   MOBILE NAV
+═══════════════════════════════════════════════════ */
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+function closeNav() {
+  document.getElementById('navLinks').classList.remove('open');
+}
+</script>
+</body>
+</html>
