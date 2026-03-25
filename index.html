@@ -149,7 +149,7 @@
     .hero-bg {
       position: absolute; inset: 0;
       background-image: url('photos/varmala-hero.jpg');
-      background-size: cover; background-position: center top;
+      background-size: cover; background-position: center 30%;
       transform: scale(1.12);
       will-change: transform;
       animation: heroKenBurns 25s ease-in-out infinite alternate;
@@ -351,30 +351,26 @@
     .section-hero {
       position: relative;
       width: 100%;
-      height: 60vh;
-      min-height: 400px;
-      max-height: 620px;
       overflow: hidden;
     }
-    .section-hero-img {
-      position: absolute; inset: 0;
-      background-size: cover; background-position: center top;
+    .section-hero img {
+      width: 100%; height: auto; display: block;
       transition: transform 8s ease-out;
     }
-    .section-hero.in-view .section-hero-img {
-      transform: scale(1.06);
+    .section-hero.in-view img {
+      transform: scale(1.03);
     }
     .section-hero-overlay {
-      position: absolute; inset: 0;
+      position: absolute; inset: 0; pointer-events: none;
     }
     .sangeet-section .section-hero-overlay {
-      background: linear-gradient(to bottom, rgba(253,248,242,0) 40%, rgba(253,248,242,1) 100%);
+      background: linear-gradient(to bottom, transparent 50%, rgba(253,248,242,1) 100%);
     }
     .haldi-section .section-hero-overlay {
-      background: linear-gradient(to bottom, rgba(254,243,216,0) 40%, rgba(254,243,216,1) 100%);
+      background: linear-gradient(to bottom, transparent 50%, rgba(254,243,216,1) 100%);
     }
     .varmala-section .section-hero-overlay {
-      background: linear-gradient(to bottom, rgba(250,240,244,0) 40%, rgba(250,240,244,1) 100%);
+      background: linear-gradient(to bottom, transparent 50%, rgba(250,240,244,1) 100%);
     }
 
     /* ─── FILMSTRIP ──────────────────────────────────────────── */
@@ -393,11 +389,11 @@
       border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
-      aspect-ratio: 4/3;
     }
     .filmstrip-item img {
-      width: 100%; height: 100%;
-      object-fit: cover;
+      width: 100%; height: auto;
+      display: block;
+      object-fit: contain;
       transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.5s;
       filter: brightness(0.95) saturate(1.08);
     }
@@ -416,16 +412,17 @@
       border-color: rgba(201,168,76,0.5);
     }
 
-    /* ─── MASONRY ────────────────────────────────────────────── */
+    /* ─── PHOTO GRID ────────────────────────────────────────────── */
     .masonry-wrap {
       padding: 0 16px;
     }
     .masonry {
-      columns: 3; column-gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
       max-width: 1280px; margin: 0 auto;
     }
     .masonry-item {
-      break-inside: avoid; margin-bottom: 10px;
       overflow: hidden; border-radius: 3px;
       cursor: pointer;
       position: relative;
@@ -439,6 +436,7 @@
       transform: translateY(0) scale(1);
     }
     .masonry-item img {
+      width: 100%; height: auto; display: block;
       transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94),
                   filter 0.55s ease;
       filter: brightness(0.97) saturate(1.05);
@@ -595,7 +593,7 @@
 
     /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 900px) {
-      .masonry { columns: 2; }
+      .masonry { grid-template-columns: repeat(2, 1fr); }
       .story-card { padding: 40px 28px; }
       .filmstrip { gap: 10px; }
     }
@@ -611,9 +609,8 @@
       }
       .nav-links.open a { font-size: 1rem; }
       .nav-burger { display: flex; }
-      .masonry { columns: 2; }
+      .masonry { grid-template-columns: repeat(2, 1fr); }
       .filmstrip { grid-template-columns: 1fr; gap: 12px; }
-      .filmstrip-item { aspect-ratio: 16/9; }
       .gallery-section { padding-bottom: 60px; }
       #lb-prev { left: 8px; }
       #lb-next { right: 8px; }
@@ -622,7 +619,7 @@
       .music-label { display: none; }
     }
     @media (max-width: 380px) {
-      .masonry { columns: 1; }
+      .masonry { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -732,7 +729,7 @@
 ══════════════════════════════════════════════ -->
 <section id="sangeet" class="gallery-section sangeet-section">
   <div class="section-hero" id="sangeetHero">
-    <div class="section-hero-img" style="background-image: url('photos/sangeet-hero.jpg'); background-position: center center;"></div>
+    <img src="photos/sangeet-hero.jpg" alt="Sangeet" />
     <div class="section-hero-overlay"></div>
   </div>
   <div class="gallery-header" style="padding-top: 52px;">
@@ -754,7 +751,7 @@
 ══════════════════════════════════════════════ -->
 <section id="haldi" class="gallery-section haldi-section">
   <div class="section-hero" id="haldiHero">
-    <div class="section-hero-img" style="background-image: url('photos/haldi-hero.jpg');"></div>
+    <img src="photos/haldi-hero.jpg" alt="Haldi" />
     <div class="section-hero-overlay"></div>
   </div>
   <div class="gallery-header" style="padding-top: 52px;">
@@ -795,7 +792,7 @@
 
 <section id="varmala" class="gallery-section varmala-section" style="padding-top: 0;">
   <div class="section-hero" id="varmalaHero">
-    <div class="section-hero-img" style="background-image: url('photos/varmala-hero.jpg');"></div>
+    <img src="photos/varmala-hero.jpg" alt="Varmala" />
     <div class="section-hero-overlay"></div>
   </div>
   <div class="gallery-header" style="padding-top: 52px;">
@@ -876,37 +873,43 @@
 const heights = [260, 320, 280, 340, 250, 300, 270, 350, 240, 290];
 const hd = i => heights[i % heights.length];
 
-// Sangeet: 3 filmstrip + 16 masonry = 19 (+ 1 hero = 20)
+// Sangeet: 3 filmstrip + 16 masonry + 1 hero = 20
 const sangeetFeatured = [
   { src: 'photos/sangeet-feat-1.jpg' },
   { src: 'photos/sangeet-feat-2.jpg' },
   { src: 'photos/sangeet-feat-3.jpg' },
 ];
-const sangeetPhotos = Array.from({length: 16}, (_, i) => ({
-  src: `photos/sangeet-${i + 1}.jpg`,
-  h: hd(i)
-}));
+const sangeetPhotos = [
+  { src: 'photos/sangeet-hero.jpg' },
+  ...Array.from({length: 16}, (_, i) => ({
+    src: `photos/sangeet-${i + 1}.jpg`
+  }))
+];
 
-// Haldi: 2 pair + 10 masonry (+ 1 hero = 13)
+// Haldi: 2 pair + 10 masonry + 1 hero = 13
 const haldiPair = [
   { src: 'photos/haldi-2.jpg' },
   { src: 'photos/haldi-1.jpg' },
 ];
-const haldiPhotos = Array.from({length: 10}, (_, i) => ({
-  src: `photos/haldi-${i + 3}.jpg`,
-  h: hd(i)
-}));
+const haldiPhotos = [
+  { src: 'photos/haldi-hero.jpg' },
+  ...Array.from({length: 10}, (_, i) => ({
+    src: `photos/haldi-${i + 3}.jpg`
+  }))
+];
 
-// Varmala: 3 filmstrip + 14 masonry = 17 (+ 1 hero = 18)
+// Varmala: 3 filmstrip + 14 masonry + 1 hero = 18
 const varmalaFeatured = [
   { src: 'photos/varmala-feat-1.jpg' },
   { src: 'photos/varmala-feat-2.jpg' },
   { src: 'photos/varmala-feat-3.jpg' },
 ];
-const varmalaPhotos = Array.from({length: 14}, (_, i) => ({
-  src: `photos/varmala-${i + 1}.jpg`,
-  h: hd(i)
-}));
+const varmalaPhotos = [
+  { src: 'photos/varmala-hero.jpg' },
+  ...Array.from({length: 14}, (_, i) => ({
+    src: `photos/varmala-${i + 1}.jpg`
+  }))
+];
 
 
 /* ═══════════════════════════════════════════════════
@@ -946,7 +949,6 @@ function buildGrid(containerId, photos, galleryName, featured) {
     const img = document.createElement('img');
     img.src = p.src;
     img.alt = `${galleryName} photo ${idx + 1}`;
-    img.style.height = p.h + 'px';
     img.loading = 'lazy';
     item.appendChild(img);
     item.addEventListener('click', () => openLightbox(combined, startIdx + idx, galleryName));
